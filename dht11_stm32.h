@@ -25,8 +25,8 @@ typedef struct {
     uint16_t           data_pin;
     TIM_HandleTypeDef *timer_handle;
     
-    float humidity;
-    float temperature;
+    uint8_t humidity;
+    uint8_t temperature;
 } DHT11_State;
 
 
@@ -91,7 +91,6 @@ int8_t dht11_read(DHT11_State *dht11)
     
     const uint16_t TIMEOUT_US = 1000;
     
-    //
     //~ MCU Sends Start Signal.
     //
     GPIO_InitTypeDef gpio = {};
@@ -113,7 +112,6 @@ int8_t dht11_read(DHT11_State *dht11)
     
     // @Note: DATA BUS STATE NOW: HIGH
     
-    //
     //~ DHT Response.
     //
     gpio.Mode = GPIO_MODE_INPUT;
@@ -134,7 +132,6 @@ int8_t dht11_read(DHT11_State *dht11)
     
     // @Note: DATA BUS STATE NOW: HIGH
     
-    //
     //~ DHT Data Transmission.
     //
     if (dht11_wait_until_signal_changes(dht11, GPIO_PIN_SET, TIMEOUT_US) >= TIMEOUT_US) {
@@ -183,9 +180,10 @@ int8_t dht11_read(DHT11_State *dht11)
         return 0;
     }
     
-    // @Note: In DHT11, data[1] (dRH) and data[3] (dT) seem to be always zero.
-    dht11->humidity    = (float)(data[0] /* + data[1]/100.0f */); // iRH
-    dht11->temperature = (float)(data[2] /* + data[3]/100.0f */); // iT
+    // @Note: 
+    // In DHT11, data[1] (dRH) and data[3] (dT) seem to be always zero.
+    dht11->humidity    = data[0]; // iRH
+    dht11->temperature = data[2]; // iT
     
     __enable_irq();
     return 1;
