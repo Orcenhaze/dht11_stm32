@@ -37,11 +37,11 @@ typedef struct {
 // Pass the port and pin of the DATA line between MCU and DHT11 device. Example: GPIOC, GPIO_PIN_0.
 // Pass a handle to a timer that increments every 1 micro-second.
 // Returns DHT11_State that you should pass to dht11_read().
-DHT11_State dht11_state_create(GPIO_TypeDef *data_port, uint16_t data_pin, TIM_HandleTypeDef *timer_handle);
+static DHT11_State dht11_state_create(GPIO_TypeDef *data_port, uint16_t data_pin, TIM_HandleTypeDef *timer_handle);
 
 // Fills the humidity and temperature values of DHT11_State.
 // Returns 1 if we read successfully, 0 otherwise.
-int8_t      dht11_read(DHT11_State *dht11);
+static int8_t      dht11_read(DHT11_State *dht11);
 
 
 ////////////////////////////////
@@ -74,7 +74,7 @@ inline static uint16_t dht11_wait_until_signal_changes(const DHT11_State *dht11,
     return (uint16_t)__HAL_TIM_GET_COUNTER(dht11->timer_handle);
 }
 
-DHT11_State dht11_state_create(GPIO_TypeDef *data_port, uint16_t data_pin, TIM_HandleTypeDef *timer_handle)
+static DHT11_State dht11_state_create(GPIO_TypeDef *data_port, uint16_t data_pin, TIM_HandleTypeDef *timer_handle)
 {
     DHT11_State result  = {};
     result.data_port    = data_port;
@@ -85,7 +85,7 @@ DHT11_State dht11_state_create(GPIO_TypeDef *data_port, uint16_t data_pin, TIM_H
     return result;
 }
 
-int8_t dht11_read(DHT11_State *dht11)
+static int8_t dht11_read(DHT11_State *dht11)
 {
     // We will just follow the communication protocol described in datasheets you can find online.
     
